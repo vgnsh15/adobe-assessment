@@ -34,6 +34,19 @@ class Events:
     """
     
     def __init__(self):
+        
+        """
+        Constructor which initilaizes the class variable from the command line arguments
+        Parameters
+        ----------
+        
+        Returns
+        ------
+        file : The filename passed as an argument from the command line
+        s3_ptah: the Boolean value to check whether the filepath is S3 or the local directory
+        """
+        
+        
         inputFile = sys.argv[1]
         s3_path = sys.argv[2]
         if s3_path == "True":
@@ -47,6 +60,20 @@ class Events:
 
     
     def readInputPath(self):
+        
+        """
+         
+        This Method reads the input file based on the arguments from the command line.
+        Checks whether the arugument is S3 location or local directory based on the second 
+        argument from the command line
+        Parameters
+        ----------
+       
+        Returns
+        ------
+        Pandas Dataframe ---> Object
+        """
+        
         if self.s3_path:
             url_parse_var = urljoin(self.file, allow_fragments=False)
             bucket_name = url_parse_var.netloc
