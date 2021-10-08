@@ -57,6 +57,7 @@ class Events:
             raise Exception("Please do mention whether the path is S3 path or nor by providing a second argument 'True' as S3 path 'False' as local path")
         self.file = inputFile
         self.s3_path = s3_path
+        print("The file path is set to the class variable")
 
     
     def readInputPath(self):
@@ -85,6 +86,7 @@ class Events:
         else:
             df= pd.read_csv(self.file, sep='\t')
         
+        print("The input file is read and datframe created")
         return df  
     
     
@@ -203,7 +205,9 @@ class Events:
             final_sql="""select search_key,search_domain,total_revenue from join_df where RN=1;"""
             
             revenue_df = ps.sqldf(final_sql,locals())
-           
+            
+            print("The final dataframe is created")
+            
             """
             Converting the final dataframe to csv buffer and drop the data to the S3 bucket
             """
@@ -212,7 +216,8 @@ class Events:
                 compression_opts = dict(method='zip',archive_name='out.csv')
                 #df.to_csv('out.zip', index=False,compression=compression_opts)
                 output_file_name = "[{0}]_SearchKeywordPerformance.tab".format(datetime.today().strftime('%Y-%m-%d'))
-                revenue_df.to_csv(output_file_name,sep ='\t') 
+                revenue_df.to_csv(output_file_name,sep ='\t')
+                print("The output file {} is generated in the current directory".format(output_file_name))
                 return
             
             
