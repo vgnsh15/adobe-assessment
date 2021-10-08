@@ -6,6 +6,7 @@ import pandasql as ps
 import numpy as np
 from pandasql import sqldf
 import io
+import sys
 from io import BytesIO
 from urllib.parse import urljoin
 #from urlparse import urlparse
