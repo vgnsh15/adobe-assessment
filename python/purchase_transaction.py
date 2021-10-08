@@ -184,7 +184,7 @@ class Events:
             if not self.s3_path:
                 compression_opts = dict(method='zip',archive_name='out.csv')
                 #df.to_csv('out.zip', index=False,compression=compression_opts)
-                df.to_csv('out.csv') 
+                revenue_df.to_csv('out.csv') 
                 return
             
             
