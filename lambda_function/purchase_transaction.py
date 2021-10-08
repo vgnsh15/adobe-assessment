@@ -150,7 +150,9 @@ class Events:
             with io.StringIO() as csv_buffer:
                 revenue_df.to_csv(csv_buffer, sep ='\t', index=False)
 
-                response = s3_client.put_object(Bucket='adbassessment', Key="output_files/revenue.tab", Body=csv_buffer.getvalue())
+                output_file_name = "[{0}]_SearchKeywordPerformance.tab".format(datetime.today().strftime('%Y-%m-%d'))
+
+                response = s3_client.put_object(Bucket='adbassessment', Key="output_files/"+output_file_name, Body=csv_buffer.getvalue())
 
                 status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
                 """
