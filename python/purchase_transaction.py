@@ -211,12 +211,12 @@ class Events:
             if not self.s3_path:
                 compression_opts = dict(method='zip',archive_name='out.csv')
                 #df.to_csv('out.zip', index=False,compression=compression_opts)
-                revenue_df.to_csv('out.csv') 
+                revenue_df.to_csv('out.csv',sep ='\t') 
                 return
             
             
             with io.StringIO() as csv_buffer:
-                revenue_df.to_csv(csv_buffer, index=False)
+                revenue_df.to_csv(csv_buffer, sep ='\t', index=False)
 
                 response = s3_client.put_object(Bucket='adbassessment', Key="output_files/revenue.csv", Body=csv_buffer.getvalue())
 
