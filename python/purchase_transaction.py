@@ -180,6 +180,13 @@ class Events:
             """
             Converting the final dataframe to csv buffer and drop the data to the S3 bucket
             """
+            
+            if not self.s3_path:
+                compression_opts = dict(method='zip',archive_name='out.csv')
+                df.to_csv('out.zip', index=False,compression=compression_opts) 
+                return
+            
+            
             with io.StringIO() as csv_buffer:
                 revenue_df.to_csv(csv_buffer, index=False)
 
