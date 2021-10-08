@@ -36,7 +36,11 @@ class Events:
     def __init__(self):
         inputFile = sys.argv[1]
         s3_path = sys.argv[2]
-        if s3_path is None:
+        if s3_path == "True":
+            s3_path = True
+        elif s3_path == "False":
+            s3_path = False
+        else:
             raise Exception("Please do mention whether the path is S3 path or nor by providing a second argument 'True' as S3 path 'False' as local path")
         self.file = inputFile
         self.s3_path = s3_path
