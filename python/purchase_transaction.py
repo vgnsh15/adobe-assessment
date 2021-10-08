@@ -211,7 +211,8 @@ class Events:
             if not self.s3_path:
                 compression_opts = dict(method='zip',archive_name='out.csv')
                 #df.to_csv('out.zip', index=False,compression=compression_opts)
-                revenue_df.to_csv('out.csv',sep ='\t') 
+                output_file_name = "[{0}]_SearchKeywordPerformance.tab".format(datetime.today().strftime('%Y-%m-%d'))
+                revenue_df.to_csv(output_file_name,sep ='\t') 
                 return
             
             
