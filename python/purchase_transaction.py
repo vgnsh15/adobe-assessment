@@ -9,6 +9,7 @@ import io
 import sys
 from io import BytesIO
 from urllib.parse import urljoin
+from datetime import datetime
 #from urlparse import urlparse
 s3_client = boto3.client('s3')
 
