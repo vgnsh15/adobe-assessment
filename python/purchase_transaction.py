@@ -218,7 +218,7 @@ class Events:
                 output_file_name = "[{0}]_SearchKeywordPerformance.tab".format(datetime.today().strftime('%Y-%m-%d'))
                 revenue_df.to_csv(output_file_name,sep ='\t')
                 print("The output file {} is generated in the current directory".format(output_file_name))
-                return
+                return revenue_df
             
             
             with io.StringIO() as csv_buffer:
