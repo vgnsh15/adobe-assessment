@@ -7,7 +7,8 @@ import numpy as np
 from pandasql import sqldf
 import io
 from io import BytesIO
-from urlparse import urlparse
+from urllib.parse import urljoin
+#from urlparse import urlparse
 s3_client = boto3.client('s3')
 
 class Events:
@@ -42,7 +43,7 @@ class Events:
     
     def readInputPath(self):
         if self.s3_path:
-            url_parse_var = urlparse(self.file, allow_fragments=False)
+            url_parse_var = urljoin(self.file, allow_fragments=False)
             bucket_name = url_parse_var.netloc
             s3_file_name = url_parse_var.path
             print("S:",bucket_name)
