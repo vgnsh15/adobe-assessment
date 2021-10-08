@@ -16,7 +16,7 @@ class TestSum(unittest.TestCase):
 
         events = Event()
         result=events.transaction_events(df)
-        self.assertEqual(result, 6)
+        #self.assertEqual(result, 6)
         assert_frame_equal(result, data)
 
 if __name__ == '__main__':
