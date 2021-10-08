@@ -7,6 +7,7 @@ import numpy as np
 from pandasql import sqldf
 import io
 from io import BytesIO
+from urlparse import urlparse
 s3_client = boto3.client('s3')
 
 class Events:
@@ -29,6 +30,30 @@ class Events:
         
         Description: Method which scans the event list dataframe column and filter the purchase transaction.
     """
+    
+    def __init__(self):
+        inputFile = open(sys.argv[1], 'rb')
+        s3_path = open(sys.argv[2])
+        if s3_path is None:
+            raise Exception("Please do mention whether the path is S3 path or nor by providing a second argument 'True' as S3 path 'False' as local path")
+        self.file = inputFile
+        self.s3_path = s3_path
+
+    
+    def readInputPath(self):
+        if self.s3_path:
+            url_parse_var = urlparse(self.file, allow_fragments=False)
+            bucket_name = url_parse_var.netloc
+            s3_file_name = url_parse_var.path
+            print("S:",bucket_name)
+            print("file:",s3_file_name)
+            resp = s3_client.get_object(Bucket=bucket_name, Key=s3_file_name)
+            df= pd.read_csv(resp['Body'], sep='\t')
+        else:
+            df= pd.read_csv(self.file, sep='\t')
+        
+        return df  
+    
     
     def revenue_cal(self,x):
         """
@@ -77,7 +102,7 @@ class Events:
                 return event_trans
     
     
-    def transaction_events(self,event,context):
+    def transaction_events(self,df):
         """
          
         This Method is the method which handles the data processing capability for the incoming S3 files.
@@ -103,12 +128,14 @@ class Events:
             """
             The bucket name and the S3 file name are fetched from the in-built the event trigger.
             """
-            bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
-            s3_file_name = event["Records"][0]["s3"]["object"]["key"]
-            print("S:",bucket_name)
-            print("file:",s3_file_name)
-            resp = s3_client.get_object(Bucket=bucket_name, Key=s3_file_name)
-            df= pd.read_csv(resp['Body'], sep='\t')
+            
+            #url_parse_var = urlparse(self.file, allow_fragments=False)
+            #bucket_name = url_parse_var.netloc
+            #s3_file_name = url_parse_var.path
+            #print("S:",bucket_name)
+            #print("file:",s3_file_name)
+            #resp = s3_client.get_object(Bucket=bucket_name, Key=s3_file_name)
+            #df= pd.read_csv(resp['Body'], sep='\t')
             """
             Calling the revenue_cal method using map function 
             """
@@ -181,22 +208,9 @@ class Events:
         except Exception as err:
             print(err)
 
-def lambda_handler(event, context):
-    """
-    This is the main handler method which gets invoked by the lambda on trigger from S3 file drop.
+
+if __name__ == '__main__':
     
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
-    context: object, required
-        Lambda Context runtime methods and attributes
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-    
-    Events().transaction_events(event,context)
+    events = Events()
+    df=events.readInputPath()
+    events.transaction_events(df)
